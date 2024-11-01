@@ -479,10 +479,10 @@ FiltaQuilla.Util = {
     return data;
   },
 
-  //bodyMimeMatchHtml function that searches message body HTML rather then normal text
+  //bodyMimeMatchHtml searches message body HTML
   //see: https://github.com/RealRaven2000/FiltaQuilla/issues/226#issuecomment-2440591305
-  //thank you to: https://github.com/RealRaven2000  for the generous assistance
-  //Creation: Novemeber 1st 2024 - Galantha: by copying the previous authors bodyMimeMatch, and modifying it to be bodyMimeMatchHtml
+  //thank you: https://github.com/RealRaven2000  for generous assistance
+  //Creation: Novemeber 1st 2024 - Galantha: copied previous authors ( R. Kent James and Axel G RealRaven2000 ) bodyMimeMatch, modified to be bodyMimeMatchHtml
   bodyMimeMatchHtml: function(aMsgHdr, searchValue, searchFlags) {
     let msgBody,
         BodyParts = [], 
@@ -493,7 +493,6 @@ FiltaQuilla.Util = {
         folder = aMsgHdr.folder;
 
     //    function isQuotedPrintable(raw) {
-    // Galantha: I am deleting the isQuotedPrintable
 	  
     /*** READ body ***/
     // let hasOffline = folder.hasMsgOffline(aMsgHdr.messageKey);
@@ -533,7 +532,7 @@ FiltaQuilla.Util = {
       } else {
 	if (mimeMsg.body && mimeMsg.contentType && mimeMsg.contentType.toLowerCase().includes("html")) { //Galantha: changed to html
           BodyParts.push(mimeMsg.body); // just in case this exists too
-          BodyType.push(mimeMsg.contentType || "?") //Galantha: interesting
+          BodyType.push(mimeMsg.contentType || "?") //Galantha: interesting content type ? needs checking
         } else if (mimeMsg.parts && mimeMsg.parts.length) {
           let origPart = mimeMsg.parts[0];
 	  if (origPart.body && origPart.contentType && ("" + origPart.contentType).toLowerCase().includes("html")) { //Galantha: changed to html
@@ -596,7 +595,7 @@ FiltaQuilla.Util = {
     if (r === true) {
       let count = 0,
           txtResults="",
-          results = reg.exec(msgBody); // the winning body part LOL   // Galantha: Its a leg! an arm!
+          results = reg.exec(msgBody); // the winning body part LOL   // Galantha: chuckles
 
       while ((results= reg.exec(msgBody)) !== null) {
         txtResults += `Match[${count}]: ${results[0]}\n`
@@ -604,7 +603,7 @@ FiltaQuilla.Util = {
       }
       FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: ${detectResults} found ${count} ${(count!=1 ? "matches": "match")}: \n ------------ \n ${txtResults} `);
       //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
-      // Galantha: I probably should have rewrote the whole thing with the above function, but I was far to lazy to research that	
+      // Galantha: I probably should have used the above, but I decided it was easier to modify existing	
     }    
     return r;
   },
