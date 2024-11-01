@@ -1708,6 +1708,60 @@
 
       }
     };
+
+
+  //self.bodyRegexHtml definition that searches message body HTML rather then normal text
+  //see: https://github.com/RealRaven2000/FiltaQuilla/issues/226#issuecomment-2440591305
+  //thank you to: https://github.com/RealRaven2000  for the generous assistance
+  //Creation: Novemeber 1st 2024 - Galantha: by copying the previous authors self.bodyRegex, and modifying it to be self.bodyRegexHtml
+  //                                       : I feel a bit out of my depth on this one
+    self.bodyRegexHtml =
+    {
+      id: "filtaquilla@mesquilla.com#bodyRegexHtml",    //Galantha: Do not know what this does, but looks ignorable
+      name: util.getBundleString("fq.bodyRegexHtml"),   //Galantha: What does this actually do? -> // ok, localization? I think
+      getEnabled: function bodyRegEx_getEnabled(scope, op) {
+        return _isLocalSearch(scope);
+      },
+      needsBody: true,
+      getAvailable: function bodyRegEx_getAvailable(scope, op) {
+        if (scope == Ci.nsMsgSearchScope.newsFilter) return false;
+        return _isLocalSearch(scope); && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkbox panel enable / disable, leaving that in 
+      },
+      getAvailableOperators: function bodyRegEx_getAvailableOperators(scope) {
+        if (!_isLocalSearch(scope))
+        {
+          return [];
+        }
+        return [Matches, DoesntMatch];
+      },
+      match: function (aMsgHdr, aSearchValue, aSearchOp) {
+        /*** SEARCH INIT  **/
+        let searchValue, searchFlags;
+        [searchValue, searchFlags] = _getRegEx(aSearchValue);
+        
+        let result = FiltaQuilla.Util.bodyMimeMatchHtml(aMsgHdr, searchValue, searchFlags); // Galantha: calling the html version of the function I created by modifying the bodyMimeMatch fucntion
+        let operand;
+        
+        switch (aSearchOp) {
+          case Matches:
+            operand = "matches";
+            break;
+          case DoesntMatch:
+            operand = "doesn't match";
+            result = !result;
+            break;
+          default: 
+            result = null;
+        }
+        FiltaQuilla.Util.logHighlightDebug(`bodyRegexHtml RESULT: ${result}`,
+          "white",
+          "rgb(0,100,0)",
+          `\n search term: Body ${operand} ${searchValue}`);
+
+        return result;
+
+      }
+    };
     
     self.subjectBodyRegex =
     {
