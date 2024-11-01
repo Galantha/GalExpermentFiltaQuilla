@@ -479,7 +479,137 @@ FiltaQuilla.Util = {
     return data;
   },
 
-  
+  //bodyMimeMatchHtml function that searches message body HTML rather then normal text
+  //see: https://github.com/RealRaven2000/FiltaQuilla/issues/226#issuecomment-2440591305
+  //thank you to: https://github.com/RealRaven2000  for the generous assistance
+  //Creation: Novemeber 1st 2024 - Galantha: by copying the previous authors bodyMimeMatch, and modifying it to be bodyMimeMatchHtml
+  bodyMimeMatchHtml: function(aMsgHdr, searchValue, searchFlags) {
+    let msgBody,
+        BodyParts = [], 
+        BodyType = [], // if we need multiple bodys (e.g. plain text + html mixed)
+        r = false,
+        reg,
+        isTested = false,
+        folder = aMsgHdr.folder;
+
+    //    function isQuotedPrintable(raw) {
+    // Galantha: I am deleting the isQuotedPrintable
+	  
+    /*** READ body ***/
+    // let hasOffline = folder.hasMsgOffline(aMsgHdr.messageKey);
+    var data;
+
+    let stream = folder.getMsgInputStream(aMsgHdr, {});
+    let isStreamError = false;
+    try {
+      // [issue #260]
+      data = "";
+      let available;
+      while (available = stream.available() ) {
+        data += NetUtil.readInputStreamToString(stream, available);
+      }
+    } catch (ex) {
+      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: NetUtil.readInputStreamToString FAILED\nStreaming the message in folder ${folder.prettyName} failed.\nMatching body impossible.`, ex);
+      isStreamError=true;
+      return false; // :( :( :( - reading the message fails.
+    } finally {
+      stream.close();
+    }
+
+    if (!data) {
+      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: No data streamed for body of ${aMsgHdr.subject}, aborting filter condition`);
+      return false;
+    }
+    
+    /** EXTRACT MIME PARTS **/
+    if (MimeParser.extractMimeMsg) {
+      // Tb 91
+      let mimeMsg = MimeParser.extractMimeMsg(data, {
+        includeAttachments: false  // ,getMimePart: partName
+      });
+      if (!mimeMsg.parts || !mimeMsg.parts.length) {
+        isTested = true;
+        msgBody = "";
+      } else {
+	if (mimeMsg.body && mimeMsg.contentType && mimeMsg.contentType.toLowerCase().includes("html")) { //Galantha: changed to html
+          BodyParts.push(mimeMsg.body); // just in case this exists too
+          BodyType.push(mimeMsg.contentType || "?") //Galantha: interesting
+        } else if (mimeMsg.parts && mimeMsg.parts.length) {
+          let origPart = mimeMsg.parts[0];
+	  if (origPart.body && origPart.contentType && ("" + origPart.contentType).toLowerCase().includes("html")) { //Galantha: changed to html
+            msgBody = origPart.body;
+            FiltaQuilla.Util.logDebugOptional (": mimeBodyHtml","found body element in parts[0]");
+            BodyParts.push(msgBody);
+            BodyType.push(origPart.contentType || "?")
+          }
+          if (origPart.parts) {
+            for (let p = 0; p<origPart.parts.length; p++)  {
+              let o = origPart.parts[p];
+              if (o.body && o.contentType && o.contentType.toLowerCase().includes("html")) { //Galantha: changed to html
+                FiltaQuilla.Util.logDebugOptional ("mimeBodyHtml","found body element in parts[0].parts[" + p + "]", o);
+                BodyParts.push(o.body);
+                BodyType.push(o.contentType || "?")
+              }
+            }
+          }
+        }
+        if (!BodyParts.length) {
+          isTested=true; // no regex, as it failed.
+          FiltaQuilla.Util.logDebug("bodyMimeMatchHtml() : No BodyParts could be extracted.");
+        } 
+          
+      }
+       
+    } else {
+      let [headers, body] = MimeParser.extractHeadersAndBody(data); // headers._rawHeaders?.forEach(e => console.log(e));
+      FiltaQuilla.Util.logDebugOptional ("mimeBodyForHtml","Have to use MimeParser.extractHeadersAndBody() which gets raw data (html|plain text)? ");
+       BodyParts.push(body); // this is only the raw mime trash! // Galantha: I agree with orginal author :(
+       BodyType.push("?");
+    }    
+    
+
+    let detectResults = "";
+    if (!isTested && BodyParts.length && searchValue) {
+      reg = RegExp(searchValue, searchFlags);
+      if (BodyParts.length>0) {
+        for (let i=0;  i<BodyParts.length; i++) {
+          FiltaQuilla.Util.logDebugOptional ("mimeBodyHtml","testing part [" + i + "] ct = ", BodyType[i]);
+          let p = BodyParts[i];
+          // parse Message 
+
+	  let found = reg.test(p);
+          if (found) {
+            let ct=p.contentType || "unknown";
+            detectResults += `bodyMimeMatchHtml: Detected Regex pattern ${searchValue}\n with content type: ${BodyType[i]}\n`
+            FiltaQuilla.Util.logDebug();
+            r = true;
+            msgBody = p;
+            break;
+          }
+        }
+      } else {
+        FiltaQuilla.Util.logDebugOptional ("mimeBodyHtml","No parts found.");
+        r = false;
+      }
+    }
+    
+    if (r === true) {
+      let count = 0,
+          txtResults="",
+          results = reg.exec(msgBody); // the winning body part LOL   // Galantha: Its a leg! an arm!
+
+      while ((results= reg.exec(msgBody)) !== null) {
+        txtResults += `Match[${count}]: ${results[0]}\n`
+        count++;
+      }
+      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: ${detectResults} found ${count} ${(count!=1 ? "matches": "match")}: \n ------------ \n ${txtResults} `);
+      //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
+      // Galantha: I probably should have rewrote the whole thing with the above function, but I was far to lazy to research that	
+    }    
+    return r;
+  },
+
+
   bodyMimeMatch: function(aMsgHdr, searchValue, searchFlags) {
     let msgBody,
         BodyParts = [], 
@@ -630,6 +760,7 @@ FiltaQuilla.Util = {
     }    
     return r;
   },
+
 
 	getFileInitArg: function(win) {
     // [issue 265]
