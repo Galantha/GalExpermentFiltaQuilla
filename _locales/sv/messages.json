@@ -101,7 +101,10 @@
     "message": "Regexmatchning i bilagans namn"
   },
   "fq.bodyRegex": {
-    "message": "Body Regexp-matchning"
+    "message": "Body Regexp-matching"
+  },
+  "fq.bodyRegexHtml": {
+    "message": "Body Regexp-matching"
   },
   "fq.copyAsRead": {
     "message": "Kopiera som läst"
