@@ -1710,24 +1710,33 @@
     };
 
 
-  //self.bodyRegexHtml definition that searches message body HTML rather then normal text
+  //self.bodyRegexHtml  searches message body HTML
   //see: https://github.com/RealRaven2000/FiltaQuilla/issues/226#issuecomment-2440591305
   //thank you to: https://github.com/RealRaven2000  for the generous assistance
-  //Creation: Novemeber 1st 2024 - Galantha: by copying the previous authors self.bodyRegex, and modifying it to be self.bodyRegexHtml
+  //Creation: Novemeber 1st 2024 - Galantha: by copying the previous authors ( R. Kent James and Axel G RealRaven2000 ) self.bodyRegex; modified to be self.bodyRegexHtml
   //                                       : I feel a bit out of my depth on this one
     self.bodyRegexHtml =
     {
       id: "filtaquilla@mesquilla.com#bodyRegexHtml",    //Galantha: Do not know what this does, but looks ignorable
-      name: util.getBundleString("fq.bodyRegexHtml"),   //Galantha: What does this actually do? -> // ok, localization? I think
-      getEnabled: function bodyRegEx_getEnabled(scope, op) {
+      name: util.getBundleString("fq.bodyRegexHtml"),   
+	    //Galantha: not entirely sure what util.getBundleString("fq.bodyRegexHtml") does 
+		// localization // updated files _locales/sv/messages.json, de, nl, en, ru
+		// fq.bodyRegex appears in content/options.xhtml, associated with checkbox id="checkBodyRegexEnabled
+	    		//, did not create a fq.bodyRegexHtml entry  in file
+			// not creating a toggle check box for self.bodyRegexHtml now, using checkBodyRegexEnabled
+	    		// see return _isLocalSearch(scope); && BodyRegexEnabled below as of  Nov 1 2024
+	    
+	    
+	    
+      getEnabled: function bodyRegExHtml_getEnabled(scope, op) {
         return _isLocalSearch(scope);
       },
       needsBody: true,
-      getAvailable: function bodyRegEx_getAvailable(scope, op) {
+      getAvailable: function bodyRegExHtml_getAvailable(scope, op) {
         if (scope == Ci.nsMsgSearchScope.newsFilter) return false;
-        return _isLocalSearch(scope); && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkbox panel enable / disable, leaving that in 
+        return _isLocalSearch(scope); && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkBodyRegexEnabled state, binding to that for now
       },
-      getAvailableOperators: function bodyRegEx_getAvailableOperators(scope) {
+      getAvailableOperators: function _getAvailableOperators(scope) {
         if (!_isLocalSearch(scope))
         {
           return [];
@@ -1739,7 +1748,7 @@
         let searchValue, searchFlags;
         [searchValue, searchFlags] = _getRegEx(aSearchValue);
         
-        let result = FiltaQuilla.Util.bodyMimeMatchHtml(aMsgHdr, searchValue, searchFlags); // Galantha: calling the html version of the function I created by modifying the bodyMimeMatch fucntion
+        let result = FiltaQuilla.Util.bodyMimeMatchHtml(aMsgHdr, searchValue, searchFlags); // Galantha: html version created by modifying bodyMimeMatch
         let operand;
         
         switch (aSearchOp) {
@@ -2232,6 +2241,7 @@
     filterService.addCustomTerm(self.subjectRegex);
     filterService.addCustomTerm(self.headerRegex);
     filterService.addCustomTerm(self.bodyRegex);
+    filterService.addCustomTerm(self.bodyRegexHtml); //Galantha: attempting to add 2024-11-01
     filterService.addCustomTerm(self.subjectBodyRegex);
     filterService.addCustomTerm(self.javascript);
     filterService.addCustomTerm(self.searchBcc);
