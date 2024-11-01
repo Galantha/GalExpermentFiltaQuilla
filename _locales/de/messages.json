@@ -106,6 +106,9 @@
   "fq.bodyRegex": {
     "message": "Body Regulärer Ausdruck"
   },
+  "fq.bodyRegexHtml": {
+    "message": "Body HTML Regulärer Ausdruck"
+  },
   "fq.copyAsRead": {
     "message": "Gelesene Kopie erstellen"
   },
