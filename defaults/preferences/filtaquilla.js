@@ -38,7 +38,7 @@ pref("extensions.filtaquilla.smarttemplates.rsp.enabled", false);
 
 // search terms
 pref("extensions.filtaquilla.SubjectRegexEnabled", true);
-pref("extensions.filtaquilla.BodyRegexEnabled", true);
+pref("extensions.filtaquilla.BodyRegexHtmlEnabled", true);
 pref("extensions.filtaquilla.SubjectBodyRegexEnabled", false);
 pref("extensions.filtaquilla.HeaderRegexEnabled", false);
 pref("extensions.filtaquilla.JavascriptEnabled", false);
