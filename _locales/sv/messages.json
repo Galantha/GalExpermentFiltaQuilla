@@ -104,7 +104,7 @@
     "message": "Body Regexp-matching"
   },
   "fq.bodyRegexHtml": {
-    "message": "Body HTML Regexp-matching"
+    "message": "Body HTML Regexp"
   },
   "fq.copyAsRead": {
     "message": "Kopiera som läst"
