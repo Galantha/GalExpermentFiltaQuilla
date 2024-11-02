@@ -107,7 +107,7 @@
     "message": "Body Regexp match"
   },
   "fq.bodyRegexHtml": {
-    "message": "Body HTML Regexp match"
+    "message": "Body HTML Regexp"
   },
   "fq.copyAsRead": {
     "message": "Copy As Read"
