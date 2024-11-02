@@ -46,7 +46,7 @@
   
 
   
-  Services.scriptloader.loadSubScript("chrome://filtaquilla/content/filtaquilla-util.js") // FiltaQuilla object
+  Services.scriptloader.loadSubScript("chrome://filtaquilla/content/filtaquilla-util.js"); // FiltaQuilla object
 
 
   const Cc = Components.classes,
@@ -389,7 +389,7 @@
         allowDuplicates: true,
         needsBody: false,
         isAsync: true
-      }
+      };
 
       // local variables and methods
       var _messageIds = null,
@@ -613,7 +613,7 @@
             
         file.initWithPath(fileURL); // check whether template exists!
         if (!file.exists()) {
-          console.log("FiltaQuilla cannot find SmartTemplates file: " + fileURL)
+          console.log("FiltaQuilla cannot find SmartTemplates file: " + fileURL);
         }
         const prefs = Services.prefs.getBranch("extensions.filtaquilla."),
               isDebug = prefs.getBoolPref("debug.SmartTemplates");
@@ -666,7 +666,7 @@
             
         file.initWithPath(fileURL); // check whether template exists!
         if (!file.exists()) {
-          console.log("FiltaQuilla cannot find SmartTemplates file: " + fileURL)
+          console.log("FiltaQuilla cannot find SmartTemplates file: " + fileURL);
         }
         // then send a message to SmartTemplates
         for (var messageIndex = 0; messageIndex < aMsgHdrs.length; messageIndex++) {
@@ -1139,7 +1139,15 @@
       id: "filtaquilla@mesquilla.com#javascriptAction",
       name: util.getBundleString("filtaquilla.javascriptAction.name"),
       applyAction: function(msgHdrs, actionValue, copyListener, filterType, msgWindow) {
-        return eval(actionValue);
+	try {
+        	return eval(actionValue);
+	}  catch (ex) { // Galantha: when testing my javascript eval action error triggered a bug report to thunderbird devs, attempting to prevent this
+		let msg = "Error: Name: " + ex.name + "\nMessage: " + ex.message + "\nCause: " + ex.cause;
+		util.logToConsole(msg);
+		util.logException("FiltaQuilla.javascriptAction - applyAction failed.", ex);
+		//settimeout(function (msg) { alert(msg); }, 10);  //I want to, but bad idea
+		return false;
+	}
       },
       apply: function(aMsgHdrs, aActionValue, aListener, aType, aMsgWindow)
       {
@@ -1160,7 +1168,14 @@
       id: "filtaquilla@mesquilla.com#javascriptActionBody",
       name: util.getBundleString("filtaquilla.javascriptActionBody.name"),
       applyAction: function(msgHdrs, actionValue, copyListener, filterType, msgWindow) {
-        return eval(actionValue);
+	try {
+        	return eval(actionValue);
+	} catch (ex) { // Galantha: when testing my javascript eval action error triggered a bug report to thunderbird devs, attempting to prevent this
+		let msg = "Error: Name: " + ex.name + "\nMessage: " + ex.message + "\nCause: " + ex.cause;
+		util.logToConsole(msg);
+		util.logException("FiltaQuilla.javascriptActionBody - applyAction failed.", ex);
+		return false;
+	} 	       
       },
       apply: function(aMsgHdrs, aActionValue, aListener, aType, aMsgWindow)
       {
@@ -1734,7 +1749,7 @@
       needsBody: true,
       getAvailable: function bodyRegExHtml_getAvailable(scope, op) {
         if (scope == Ci.nsMsgSearchScope.newsFilter) return false;
-        return _isLocalSearch(scope); && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkBodyRegexEnabled state, binding to that for now
+        return _isLocalSearch(scope) && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkBodyRegexEnabled state, binding to that for now
       },
       getAvailableOperators: function _getAvailableOperators(scope) {
         if (!_isLocalSearch(scope))
@@ -1843,7 +1858,7 @@
         // reference the nsIMsgDBHdr objst for the message
         switch (aSearchOp)
         {
-          case Matches:
+          case Matches:  //Galantha: not sure what this is associated to, but suspect should be wrapped in try / catch?
             return eval(aSearchValue);
           case DoesntMatch:
             return !eval(aSearchValue);
@@ -2033,7 +2048,7 @@
         validateActionValue: function(value, folder, type) { return null;},
 
         allowDuplicates: true
-    }
+    };
     
 
  };
@@ -2311,7 +2326,7 @@
     }
     else // reschedule another check
       moveLaterTimers[this.timerIndex].initWithCallback(this, MOVE_LATER_DELAY, Ci.nsITimer.TYPE_ONE_SHOT);
-  }
+  };
 
   // is this search scope local, and therefore valid for db-based terms?
   function _isLocalSearch(aSearchScope) {
