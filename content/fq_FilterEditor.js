@@ -779,10 +779,10 @@
                   break;
                 case "filtaquilla@mesquilla.com#threadheadtag":  // fall-through
                 case "filtaquilla@mesquilla.com#threadanytag":
-                  isPatched = patchFiltaQuillaTagSelector(es)
+                  isPatched = patchFiltaQuillaTagSelector(es);
                   break;
                 case "filtaquilla@mesquilla.com#javascript":
-                  isPatched = patchFiltaQuillaJavaScriptCondition(es)
+                  isPatched = patchFiltaQuillaJavaScriptCondition(es);
                   break;
                 default:
                   // irrelevant for FiltaQuilla
@@ -828,14 +828,14 @@
                     if (es.firstChild.classList.contains("fq-tag")) return;
                     es.removeChild(es.firstChild);
                   }
-                  isPatched = patchFiltaQuillaTagSelector(es)
+                  isPatched = patchFiltaQuillaTagSelector(es);
                   break;
                 case "filtaquilla@mesquilla.com#javascript":
                   if (es.firstChild) {
                     if (es.firstChild.classList.contains("fq-javascript")) return;
                     es.removeChild(es.firstChild);
                   }
-                  isPatched = patchFiltaQuillaJavaScriptCondition(es)
+                  isPatched = patchFiltaQuillaJavaScriptCondition(es);
                   break;
                 default:
                   // irrelevant for FiltaQuilla
@@ -862,7 +862,7 @@
     subtree: true // Omit (or set to false) to observe only changes to the parent node
   }
   
-  let termList = window.document.querySelector('#searchTermList')
+  let termList = window.document.querySelector('#searchTermList');
   fq_observer.observe(termList, fq_observerOptions);
   
   function selectCustomCondition(event) {
