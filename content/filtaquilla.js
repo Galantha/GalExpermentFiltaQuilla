@@ -135,9 +135,11 @@
       ThreadAnyTagEnabled = false,
       FolderNameEnabled = false,
       BodyRegexEnabled = false,
+      BodyRegexHtmlEnabled = false, /* Galantha: Added Nov 2 2024 for filter self.bodyRegexHtml
+   					//see also: content/filtaquilla.js, defaults/preferences/filtaquilla.js, content/options.xhtml, */
       SubjectBodyRegexEnabled = false;
-	// [#5] AG new condition - attachment name regex
-	let AttachmentRegexEnabled = false,
+      // [#5] AG new condition - attachment name regex
+      let AttachmentRegexEnabled = false,
       moveLaterTimers = {}, // references to timers used in moveLater action
       moveLaterIndex = 0; // next index to use to store timers
 
@@ -1733,16 +1735,13 @@
     self.bodyRegexHtml =
     {
       id: "filtaquilla@mesquilla.com#bodyRegexHtml",    //Galantha: used by content/fq_FilterEditor.js to assign input textbox to operator dropdown after user selectes filter + operator
-	    							// used by content/fq_FilterEditor.js in ways I do not understand
+	    							//  used by content/fq_FilterEditor.js in ways I do not understand
 	    
       name: util.getBundleString("fq.bodyRegexHtml"),   
 	    //Galantha: not entirely sure what util.getBundleString("fq.bodyRegexHtml") does 
 		// localization // updated files _locales/sv/messages.json, de, nl, en, ru
-		// fq.bodyRegex appears in content/options.xhtml, associated with checkbox id="checkBodyRegexEnabled
-	    		//, did not create a fq.bodyRegexHtml entry  in file
-			// not creating a toggle check box for self.bodyRegexHtml now, using checkBodyRegexEnabled
-	    		// see return _isLocalSearch(scope); && BodyRegexEnabled below as of  Nov 1 2024
-	    
+		// content/options.xhtml to add gui check box to enable disable
+	    	//leads to creating: BodyRegexHtmlEnabled
 	    
 	    
       getEnabled: function bodyRegExHtml_getEnabled(scope, op) {
@@ -1751,7 +1750,7 @@
       needsBody: true,
       getAvailable: function bodyRegExHtml_getAvailable(scope, op) {
         if (scope == Ci.nsMsgSearchScope.newsFilter) return false;
-        return _isLocalSearch(scope) && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkBodyRegexEnabled state, binding to that for now
+        return _isLocalSearch(scope) && BodyRegexHtmlEnabled; 
       },
       getAvailableOperators: function bodyRegExHtml_getAvailableOperators(scope) {
         if (!_isLocalSearch(scope))
@@ -2195,22 +2194,20 @@
     try {
       FolderNameEnabled = prefs.getBoolPref("FolderNameEnabled");
     } catch(e) {}
-    
-		try {
+    try {
 			AttachmentRegexEnabled = prefs.getBoolPref("AttachmentRegexEnabled");
-		} catch(e) {}
- 
-		try {
+    } catch(e) {}
+    try {
 			BodyRegexEnabled = prefs.getBoolPref("BodyRegexEnabled");
-		} catch(e) {}
-
+    } catch(e) {}
+    try {
+			BodyRegexHtmlEnabled = prefs.getBoolPref("BodyRegexHtmlEnabled");
+    } catch(e) {}
     try {
 			SubjectBodyRegexEnabled = prefs.getBoolPref("SubjectBodyRegexEnabled");
-		} catch(e) {}
+    } catch(e) {}
     
     fileNamesSpaceCharacter = prefs.getStringPref("fileNames.spaceCharacter");
-
-
   }
 
   // extension initialization
