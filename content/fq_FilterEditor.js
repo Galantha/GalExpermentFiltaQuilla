@@ -23,7 +23,7 @@
   var Services = globalThis.Services || ChromeUtils.import(
     "resource://gre/modules/Services.jsm"
   ).Services;
-  Services.scriptloader.loadSubScript("chrome://filtaquilla/content/filtaquilla-util.js") // FiltaQuilla object
+  Services.scriptloader.loadSubScript("chrome://filtaquilla/content/filtaquilla-util.js"); // FiltaQuilla object
   var { ToneQuillaPlay } = ChromeUtils.import("resource://filtaquilla/ToneQuillaPlay.jsm");
 
   const util = FiltaQuilla.Util,
@@ -180,7 +180,7 @@
           pathBox.value = fp.file.path;
           hBox.value = fp.file.path;
         }
-      }
+      };
 
       if (fp.open)
         fp.open(fpCallback);
@@ -254,7 +254,7 @@
           pathBox.value = fp.file.path;
           hBox.value = fp.file.path;
         }
-      }
+      };
 
       if (fp.open)
         fp.open(fpCallback);
@@ -318,7 +318,7 @@
           pathBox.value = fp.file.path + ",@SUBJECT@,@MESSAGEID@";
           hBox.value = pathBox.value;
         }
-      }
+      };
 
       if (fp.open)
         fp.open(fpCallback);
@@ -373,7 +373,7 @@
       this.addDirectories(dirs, menupopup);
 
       updateParentNode(this.closest(".ruleaction"));
-      let value = typeof(this.hbox.value) != 'undefined' ? this.hbox.value : ""
+      let value = typeof(this.hbox.value) != 'undefined' ? this.hbox.value : "";
       // set the default to the personal address book
       if (!value || !value.length)
         value = "moz-abmdbdirectory://abook.mab";    
@@ -384,7 +384,7 @@
         menulist.selectedItem = valueElements[0];
       else
         menulist.selectedIndex = 0;
-      this.value = menulist.selectedItem.getAttribute("value");;
+      this.value = menulist.selectedItem.getAttribute("value");
 
     }
 
@@ -464,7 +464,7 @@
           pathBox.value = fp.file.path;
           hBox.value = pathBox.value;
         }
-      }
+      };
 
       if (fp.open)
         fp.open(fpCallback);
@@ -556,7 +556,7 @@
           pathBox.value = fp.file.path;
           hBox.value = pathBox.value;
         }
-      } 
+      };
 
       if (pathBox.value)  {
         try {
@@ -612,7 +612,7 @@
       es.onCommand = function() {
         let textbox = es.children[1]; // document.getAnonymousNodes(es)[1];
         window.openDialog("chrome://filtaquilla/content/jsEditor.xhtml", "", "chrome,dialog,centerscreen,modal,resizable=yes", textbox);
-      }
+      };
       
       
       es.textContent = "";
@@ -663,7 +663,7 @@
   
   function patchFiltaQuillaTagSelector(es) {
     function updateSearchValue(menulist) {
-      let target = this.closest(".search-value-custom");
+      let target = this.closest(".search-value-custom");  //Galantha: Nov 2 2024: Many years later I look at this, and if I understand correctly, in strict mode, this === undefined in all cases in this context. :( 
       if (target) {
         target.setAttribute("value", menulist.value);
         // The AssignMeaningfulName functions uses the item's js value, so set
@@ -772,6 +772,7 @@
                 case "filtaquilla@mesquilla.com#subjectBodyRegex": // fall-through
                 case "filtaquilla@mesquilla.com#headerRegex" :     // fall-through
                 case "filtaquilla@mesquilla.com#bodyRegex":        // fall-through
+                case "filtaquilla@mesquilla.com#bodyRegexHtml":    // fall-through
                 case "filtaquilla@mesquilla.com#searchBcc" :       // fall-through
                 case "filtaquilla@mesquilla.com#folderName" :      
                   isPatched = patchFiltaQuillaTextbox(es);
@@ -812,6 +813,7 @@
                 case "filtaquilla@mesquilla.com#subjectBodyRegex": // fall-through
                 case "filtaquilla@mesquilla.com#headerRegex" :     // fall-through
                 case "filtaquilla@mesquilla.com#bodyRegex" :       // fall-through
+                case "filtaquilla@mesquilla.com#bodyRegexHtml" :   // fall-through  
                 case "filtaquilla@mesquilla.com#searchBcc" :       // fall-through
                 case "filtaquilla@mesquilla.com#folderName" :      
                   if (es.firstChild) {
@@ -893,6 +895,7 @@
                "filtaquilla@mesquilla.com#attachmentRegex",
                "filtaquilla@mesquilla.com#headerRegex",
                "filtaquilla@mesquilla.com#bodyRegex",
+               "filtaquilla@mesquilla.com#bodyRegexHtml",
                "filtaquilla@mesquilla.com#subjectBodyRegex",
                "filtaquilla@mesquilla.com#searchBcc",
                "filtaquilla@mesquilla.com#folderName"].includes(attType)) {
@@ -921,6 +924,7 @@
         case "filtaquilla@mesquilla.com#attachmentRegex":  // fall-through
         case "filtaquilla@mesquilla.com#headerRegex":      // fall-through
         case "filtaquilla@mesquilla.com#bodyRegex":        // fall-through
+        case "filtaquilla@mesquilla.com#bodyRegexHtml":    // fall-through
         case "filtaquilla@mesquilla.com#searchBcc":        // fall-through
         case "filtaquilla@mesquilla.com#folderName":      
           isPatched = patchFiltaQuillaTextbox(searchValueItem);
