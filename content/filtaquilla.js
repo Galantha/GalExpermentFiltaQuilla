@@ -1732,7 +1732,9 @@
   //                                       : I feel a bit out of my depth on this one
     self.bodyRegexHtml =
     {
-      id: "filtaquilla@mesquilla.com#bodyRegexHtml",    //Galantha: Do not know what this does, but looks ignorable
+      id: "filtaquilla@mesquilla.com#bodyRegexHtml",    //Galantha: used by content/fq_FilterEditor.js to assign input textbox to operator dropdown after user selectes filter + operator
+	    							// used by content/fq_FilterEditor.js in ways I do not understand
+	    
       name: util.getBundleString("fq.bodyRegexHtml"),   
 	    //Galantha: not entirely sure what util.getBundleString("fq.bodyRegexHtml") does 
 		// localization // updated files _locales/sv/messages.json, de, nl, en, ru
@@ -1751,7 +1753,7 @@
         if (scope == Ci.nsMsgSearchScope.newsFilter) return false;
         return _isLocalSearch(scope) && BodyRegexEnabled; //Galantha: I think BodyRegexEnabled = checkBodyRegexEnabled state, binding to that for now
       },
-      getAvailableOperators: function _getAvailableOperators(scope) {
+      getAvailableOperators: function bodyRegExHtml_getAvailableOperators(scope) {
         if (!_isLocalSearch(scope))
         {
           return [];
