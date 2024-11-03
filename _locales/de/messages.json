@@ -199,6 +199,9 @@
   "fq.regex.caseInsensitive": {
     "message": "Regulärer Ausdruck ohne Beachtung der Groß-/Kleinschreibung"
   },
+  "fq.regex.multiLine": {
+    "message": "Mehrzeiliges Flag für reguläre Ausdrücke"
+  },
   "fq.removeflagged": {
     "message": "Stern entfernen"
   },
