@@ -196,6 +196,9 @@
   "fq.regex.caseInsensitive": {
     "message": "Regex hoofdletterongevoelige Match"
   },
+  "fq.regex.multiLine": {
+    "message": "Reguliere expressie meerregelige vlag"
+  },
   "fq.removeflagged": {
     "message": "Ster verwijderen"
   },
