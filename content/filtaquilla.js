@@ -2506,7 +2506,7 @@
     if (regexpCaseInsensitiveEnabled && !searchFlags.includes("i") && !searchFlags.includes(REGEX_CASE_SENSITIVE_FLAG)){
       searchFlags += "i";
     }
-    if (regexpMultiLineEnabled && !searchFlags.includes("m")){ //Galantha: added Nov 2 2024, I need multi-line regex for self.bodyRegexHtml
+    if (BodyRegexHtmlEnabled && !searchFlags.includes("m")){ //Galantha: added Nov 2 2024, I need multi-line regex for self.bodyRegexHtml
       searchFlags += "m";
     }
     
