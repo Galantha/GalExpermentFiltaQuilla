@@ -32,6 +32,7 @@ pref("extensions.filtaquilla.tonequilla.enabled", false);
 pref("extensions.filtaquilla.saveMessageAsFile.enabled", false);
 pref("extensions.filtaquilla.moveLater.enabled", false);
 pref("extensions.filtaquilla.regexpCaseInsensitive.enabled", true);
+pref("extensions.filtaquilla.regexpMultiLine.enabled", true);
 pref("extensions.filtaquilla.archiveMessage.enabled", false);
 pref("extensions.filtaquilla.smarttemplates.fwd.enabled", false);
 pref("extensions.filtaquilla.smarttemplates.rsp.enabled", false);
