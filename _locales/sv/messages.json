@@ -193,6 +193,10 @@
   "fq.regex.caseInsensitive": {
     "message": "Regex skiftlägeskänslig Match"
   },
+
+  "fq.regex.multiLine": {
+    "message": "Reguljärt uttryck multiline flagga"
+  },
   "fq.removeflagged": {
     "message": "Ta bort stjärna"
   },
