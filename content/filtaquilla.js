@@ -2369,7 +2369,7 @@
       );
       unicodeConverter.charset = "UTF-8";
       return unicodeConverter.ConvertFromUnicode(aSrc);
-    };
+    }
     
     if (/@SUBJECT@/.test(parameter)) {
       // let str = convertFromUnicode(hdr.mime2DecodedSubject);
