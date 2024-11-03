@@ -199,6 +199,9 @@
   "fq.regex.caseInsensitive": {
     "message": "Regex case-insensitive Match"
   },
+  "fq.regex.multiLine": {
+    "message": "Regex multiline flag"
+  },
   "fq.removeflagged": {
     "message": "Remove Star"
   },
