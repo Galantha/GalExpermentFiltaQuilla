@@ -52,6 +52,7 @@
     <preferences>
       <preference id="subjectAppendEnabled" name="extensions.filtaquilla.subjectAppend.enabled" type="bool"/>
       <preference id="regexpCaseInsensitiveEnabled" name="extensions.filtaquilla.regexpCaseInsensitive.enabled" type="bool"/>
+      <preference id="regexpMultiLineEnabled" name="extensions.filtaquilla.regexpMultiLine.enabled" type="bool"/>
       <preference id="subjectSuffixEnabled" name="extensions.filtaquilla.subjectSuffix.enabled" type="bool"/>
       <preference id="removeKeywordEnabled" name="extensions.filtaquilla.removeKeyword.enabled" type="bool"/>
       <preference id="removeFlaggedEnabled" name="extensions.filtaquilla.removeFlagged.enabled" type="bool"/>
@@ -451,6 +452,10 @@
             <checkbox id="checkRegexpCaseInsensitiveEnabled" 
                       preference="regexpCaseInsensitiveEnabled"
                       label="__MSG_fq.regex.caseInsensitive__"/>
+          <div>
+            <checkbox id="checkRegexpMultiLineEnabled" 
+                      preference="regexpMultiLineEnabled"
+                      label="__MSG_fq.regex.multiLine__"/>
           </div>
         </tabpanel>
         
