@@ -196,6 +196,12 @@
   "fq.regex.caseInsensitive": {
     "message": "Регэксп совпадение без учета регистра"
   },
+  "fq.regex.caseInsensitive": {
+    "message": "Регэксп совпадение без учета регистра"
+  },
+  "fq.regex.multiLine": {
+    "message": "Многострочный флаг регулярного выражения"
+  },
   "fq.removeflagged": {
     "message": "Удалить звездочку"
   },
