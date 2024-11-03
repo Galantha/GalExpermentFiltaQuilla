@@ -645,7 +645,13 @@ FiltaQuilla.Util = {
     // let hasOffline = folder.hasMsgOffline(aMsgHdr.messageKey);
     var data;
 
-    let stream = folder.getMsgInputStream(aMsgHdr, {});
+    let stream;
+    try {
+	stream = folder.getMsgInputStream(aMsgHdr, {});
+    } catch (streamError) {
+	FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: folder.getMsgInputStream failed stream error; subject: ${subject}, ex: ${streamError.name}`);
+	return false;
+    } //Galantha: fixes exception spam of Uncaught NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIMsgFolder.getMsgInputStream]
     let isStreamError = false;
     try {
       // [issue #260]
