@@ -291,7 +291,7 @@ FiltaQuilla.Util = {
 				}
 			}
 		}
-		catch(ex) {;}
+		catch(ex) {}
   },
 
   toggleBoolPreference: function(cb, noUpdate) {
@@ -490,15 +490,21 @@ FiltaQuilla.Util = {
         r = false,
         reg,
         isTested = false,
-        folder = aMsgHdr.folder;
+        folder = aMsgHdr.folder,
+	subject = aMsgHdr.subject;
 
     //    function isQuotedPrintable(raw) {
 	  
     /*** READ body ***/
     // let hasOffline = folder.hasMsgOffline(aMsgHdr.messageKey);
     var data;
-
-    let stream = folder.getMsgInputStream(aMsgHdr, {});
+    let stream;
+    try {
+	stream = folder.getMsgInputStream(aMsgHdr, {});
+    } catch (streamError) {
+	FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: folder.getMsgInputStream failed stream error; subject: ${subject}, ex: ${streamError.name}`);
+	return false;
+    }
     let isStreamError = false;
     try {
       // [issue #260]
@@ -509,7 +515,7 @@ FiltaQuilla.Util = {
 	available = stream.available();
       }
     } catch (ex) {
-      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: NetUtil.readInputStreamToString FAILED\nStreaming the message in folder ${folder.prettyName} failed.\nMatching body impossible.`, ex);
+      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: NetUtil.readInputStreamToString FAILED\nStreaming the message with subject ${subject} in folder ${folder.prettyName} failed.\nMatching body impossible.`, ex);
       isStreamError=true;
       return false; // :( :( :( - reading the message fails.
     } finally {
@@ -517,7 +523,7 @@ FiltaQuilla.Util = {
     }
 
     if (!data) {
-      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: No data streamed for body of ${aMsgHdr.subject}, aborting filter condition`);
+      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: No data streamed for body of message with subject ${subject}, aborting filter condition`);
       return false;
     }
     
@@ -588,7 +594,7 @@ FiltaQuilla.Util = {
           }
         }
       } else {
-        let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags}`;
+        let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags} of message with subject ${subject}`;
         FiltaQuilla.Util.logDebugOptional ("mimeBody",debugMessage);
         
         r = false;
@@ -597,7 +603,7 @@ FiltaQuilla.Util = {
     
     //Galantha: code block in orginal function caused overflow error here, altered it to this
     if (r === true) {  
-    	FiltaQuilla.Util.logDebug(`Search: ${searchValue} Flags: ${searchFlags}\n $detectResults`);
+    	FiltaQuilla.Util.logDebug(`of message with subject ${subject}:\n Search: ${searchValue} Flags: ${searchFlags}\n\n${detectResults}`);
     }
 	  
     //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
@@ -630,7 +636,7 @@ FiltaQuilla.Util = {
       if (vals.length < 2) return false;
       const contentType = vals[1].trim();
       var result = (contentType=="quoted-printable");
-      FiltaQuilla.Util.logDebug(`content type from raw message: ${contentType}\nisQuotedPrintable=${result}`);
+      FiltaQuilla.Util.logDebug(`content type from raw message: ${contentType}\nisQuotedPrintable=${result} of message with subject ${subject}`);
       return result;
     }
         
@@ -649,7 +655,7 @@ FiltaQuilla.Util = {
 	available = stream.available();
       }
     } catch (ex) {
-      FiltaQuilla.Util.logDebug(`NetUtil.readInputStreamToString FAILED\nStreaming the message in folder ${folder.prettyName} failed.\nMatching body impossible.`, ex);
+      FiltaQuilla.Util.logDebug(`NetUtil.readInputStreamToString FAILED\nStreaming the message in folder ${folder.prettyName} failed.\nMatching body impossible.  of message with subject ${subject}`, ex);
       isStreamError=true;
       return false; // shit shit shit - reading the message fails.
     } finally {
@@ -657,7 +663,7 @@ FiltaQuilla.Util = {
     }
 
     if (!data) {
-      FiltaQuilla.Util.logDebug(`No data streamed for body of ${aMsgHdr.subject}, aborting filter condition`);
+      FiltaQuilla.Util.logDebug(`No data streamed for body of message with subject ${subject}, aborting filter condition`);
       return false;
     }
     
@@ -738,14 +744,14 @@ FiltaQuilla.Util = {
           }
         }
       } else {
-	let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags}`;
+	let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags}  of message with subject ${subject}`;
         FiltaQuilla.Util.logDebugOptional ("mimeBody",debugMessage);
         r = false;
       }
     }
 
     if (r === true) {  
-    	FiltaQuilla.Util.logDebug(`Search: ${searchValue} Flags: ${searchFlags}\n $detectResults`);
+    	FiltaQuilla.Util.logDebug(`of message with subject ${subject}; Search: ${searchValue} Flags: ${searchFlags}\n ${detectResults}`);
     }
 
     /* Galantha: Nov 3 2024: This caused overflow in bodyMemeMatchHtml, altering here also
