@@ -2145,7 +2145,7 @@
       regexpCaseInsensitiveEnabled = prefs.getBoolPref("regexpCaseInsensitive.enabled");
     } catch (e) {}
     try {
-      regexpMultiLineEnabled = prefs.getBoolPref("regexpMultiLineEnabled.enabled");
+      regexpMultiLineEnabled = prefs.getBoolPref("regexpMultiLine.enabled");
     } catch (e) {}
        
     try {
