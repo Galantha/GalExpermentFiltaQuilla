@@ -213,7 +213,7 @@ FiltaQuilla.Util = {
       timePassed = '[' + elapsed + ' ms]   ';
       this.lastTime = endTime; // remember last time
     }
-    catch(e) {;}
+    catch(e) {}
     return end.getHours() + ':' + end.getMinutes() + ':' + end.getSeconds() + '.' + end.getMilliseconds() + '  ' + timePassed;
   },
 
@@ -588,24 +588,20 @@ FiltaQuilla.Util = {
           }
         }
       } else {
-        FiltaQuilla.Util.logDebugOptional ("mimeBodyHtml","No parts found.");
+        let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags}`;
+        FiltaQuilla.Util.logDebugOptional ("mimeBody",debugMessage);
+        
         r = false;
       }
     }
     
-    if (r === true) {
-      let count = 0,
-          txtResults="",
-          results = reg.exec(msgBody); // the winning body part LOL   // Galantha: chuckles
-
-      while ((results= reg.exec(msgBody)) !== null) {
-        txtResults += `Match[${count}]: ${results[0]}\n`;
-        count++;
-      }
-      FiltaQuilla.Util.logDebug(`bodyMimeMatchHtml: ${detectResults} found ${count} ${(count!=1 ? "matches": "match")}: \n ------------ \n ${txtResults} `);
-      //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
-      // Galantha: I probably should have used the above, but I decided it was easier to modify existing	
-    }    
+    //Galantha: code block in orginal function caused overflow error here, altered it to this
+    if (r === true) {  
+    	FiltaQuilla.Util.logDebug(`Search: ${searchValue} Flags: ${searchFlags}\n $detectResults`);
+    }
+	  
+    //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
+    // Galantha: I probably should have used the above, but I decided it was easier to modify existing	
     return r;
   },
 
@@ -742,23 +738,29 @@ FiltaQuilla.Util = {
           }
         }
       } else {
-        FiltaQuilla.Util.logDebugOptional ("mimeBody","No parts found.");
+	let debugMessage = `No parts found. Search: ${searchValue} Flags: ${searchFlags}`;
+        FiltaQuilla.Util.logDebugOptional ("mimeBody",debugMessage);
         r = false;
       }
     }
-    
+
+    if (r === true) {  
+    	FiltaQuilla.Util.logDebug(`Search: ${searchValue} Flags: ${searchFlags}\n $detectResults`);
+    }
+
+    /* Galantha: Nov 3 2024: This caused overflow in bodyMemeMatchHtml, altering here also
     if (r === true) {
       let count = 0,
           txtResults="",
           results = reg.exec(msgBody); // the winning body part LOL
 
-      while ((results= reg.exec(msgBody)) !== null) {
+      while ((results= reg.exec(msgBody)) !== null) { //Galantha: I do not see how this does not create an infinite loop: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
         txtResults += `Match[${count}]: ${results[0]}\n`;
         count++;
       }
       FiltaQuilla.Util.logDebug(`${detectResults} found ${count} ${(count!=1 ? "matches": "match")}: \n ------------ \n ${txtResults} `);
       //  FiltaQuilla.Util.logDebug("Thunderbird 91 will have a new function MimeParser.extractMimeMsg()  which will enable proper body parsing ")
-    }    
+    } */
     return r;
   },
 
@@ -809,8 +811,8 @@ FiltaQuilla.Util = {
         catch (e) {
           prev = "?";
           FiltaQuilla.Util.logDebugOptional ("firstrun","Could not determine previous version - " + e);
-        } ;
-
+        }
+	
         FiltaQuilla.Util.logDebugOptional ("firstrun","try to get setting: getBoolPref(firstrun)");
         try { 
           firstrun = ssPrefs.getBoolPref("firstRun"); 
