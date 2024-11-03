@@ -119,6 +119,7 @@
       saveMessageAsFileEnabled = false,
       moveLaterEnabled = false, 
       regexpCaseInsensitiveEnabled = false,
+      regexpMultiLineEnabled = false,
       archiveMessageEnabled = false,
       fwdSmartTemplatesEnabled = false,
       rspSmartTemplatesEnabled = false,
@@ -2143,6 +2144,9 @@
     try {
       regexpCaseInsensitiveEnabled = prefs.getBoolPref("regexpCaseInsensitive.enabled");
     } catch (e) {}
+    try {
+      regexpMultiLineEnabled = prefs.getBoolPref("regexpMultiLineEnabled");
+    } catch (e) {}
        
     try {
       tonequillaEnabled = prefs.getBoolPref("tonequilla.enabled");
@@ -2501,6 +2505,9 @@
     
     if (regexpCaseInsensitiveEnabled && !searchFlags.includes("i") && !searchFlags.includes(REGEX_CASE_SENSITIVE_FLAG)){
       searchFlags += "i";
+    }
+    if (regexpMultiLineEnabled && !searchFlags.includes("m")){ //Galantha: added Nov 2 2024, I need multi-line regex for self.bodyRegexHtml
+      searchFlags += "m";
     }
     
     return [searchValue, searchFlags];
