@@ -619,7 +619,8 @@ FiltaQuilla.Util = {
         r = false,
         reg,
         isTested = false,
-        folder = aMsgHdr.folder;
+        folder = aMsgHdr.folder,
+	subject = aMsgHdr.subject;
 
     function isQuotedPrintable(raw) {
       if (!raw) {
