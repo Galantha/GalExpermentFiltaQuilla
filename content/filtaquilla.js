@@ -2212,7 +2212,7 @@
     } catch(e) {}
     
     fileNamesSpaceCharacter = prefs.getStringPref("fileNames.spaceCharacter");
-  }
+  };
 
   // extension initialization
   self.onLoad = async function() {
