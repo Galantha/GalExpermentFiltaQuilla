@@ -1782,7 +1782,7 @@
         FiltaQuilla.Util.logHighlightDebug(`bodyRegexHtml RESULT: ${result}`,
           "white",
           "rgb(0,100,0)",
-          `\n search term: Body ${operand} ${searchValue}`);
+          `\n search term: Body ${operand} ${searchValue} of message with subject ${aMsgHdr.subject}`);
 
         return result;
 
